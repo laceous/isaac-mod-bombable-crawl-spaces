@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+    <name>Bombable Crawl Spaces</name>
+    <directory>bombable crawl spaces</directory>
+    <id>3801389626</id>
+    <description>Ever gone into a crawl space and wanted to bomb your way to the black market? Ever wanted to bomb through that one wall that hides an item behind it? Well, now you can... 50% of the time.
+
+This mod allows you to bomb selective walls in crawl spaces. You can also use Dad's Key in these rooms. Only built-in rooms are currently supported.
+
+Mod Config Menu will let you change the percentage.
+
+This mod requires REPENTOGON.</description>
+    <version>1.1</version>
+    <visibility>Public</visibility>
+    <tag id="Lua"/>
+    <tag id="Rooms"/>
+    <tag id="Tweaks"/>
+</metadata>
