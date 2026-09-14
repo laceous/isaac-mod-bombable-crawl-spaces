@@ -9,8 +9,10 @@ This mod allows you to bomb selective walls in crawl spaces. You can also use Da
 
 Mod Config Menu will let you change the percentage.
 
-This mod requires REPENTOGON.</description>
-    <version>1.1</version>
+This mod requires REPENTOGON.
+
+Update: Better support for black market doors from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3057349799]Crawlspaces Rebuilt[/url] has been added. Doors should now show up immediately, and in non-standard places.</description>
+    <version>1.2</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Rooms"/>

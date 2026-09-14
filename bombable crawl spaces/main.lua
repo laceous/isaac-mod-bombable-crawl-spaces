@@ -11,6 +11,7 @@ if REPENTOGON then
   
   mod.state = {}
   mod.state.percent = 50
+  mod.state.blackMarketDoors = true -- crawlspaces rebuilt mod
   
   function mod:onGameStart()
     if mod:HasData() then
@@ -19,6 +20,9 @@ if REPENTOGON then
       if type(state) == 'table' then
         if math.type(state.percent) == 'integer' and state.percent >= 0 and state.percent <= 100 then
           mod.state.percent = state.percent
+        end
+        if type(state.blackMarketDoors) == 'boolean' then
+          mod.state.blackMarketDoors = state.blackMarketDoors
         end
       end
     end
@@ -90,6 +94,7 @@ if REPENTOGON then
             end
           end
         end
+        mod:doCrawlspacesRebuiltCompat()
       end
     end
   end
@@ -181,6 +186,7 @@ if REPENTOGON then
           end
         end
       end
+      mod:doCrawlspacesRebuiltCompat()
     end
   end
   
@@ -209,6 +215,37 @@ if REPENTOGON then
     return options[rng:RandomInt(#options) + 1]
   end
   
+  function mod:doCrawlspacesRebuiltCompat()
+    if not CrawlspacesRebuilt or not mod.state.blackMarketDoors then
+      return
+    end
+    
+    local level = game:GetLevel()
+    local room = level:GetCurrentRoom()
+    local roomDesc = level:GetCurrentRoomDesc()
+    
+    if room:GetType() == RoomType.ROOM_DUNGEON and
+       room:GetRoomShape() == RoomShape.ROOMSHAPE_1x1 and
+       roomDesc.Data.Subtype == RoomSubType.CRAWLSPACE_NORMAL and
+       roomDesc.Data.StageID == StbType.SPECIAL_ROOMS
+    then
+      local gridIdx = nil
+      if mod:tblHasVal({ 0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12 }, roomDesc.Data.Variant) then
+        gridIdx = 74
+      elseif roomDesc.Data.Variant == 3 then
+        gridIdx = 59
+      end
+      
+      if gridIdx then
+        local gridEntity = room:GetGridEntity(gridIdx)
+        if gridEntity and gridEntity:GetType() == GridEntityType.GRID_GRAVITY then
+          gridEntity:GetSprite():Load('gfx/content/dungeon/hatch.anm2', true)
+          gridEntity:GetSprite():Play('marketdoor', true)
+        end
+      end
+    end
+  end
+  
   function mod:tblHasVal(tbl, val)
     for _, v in ipairs(tbl) do
       if v == val then
@@ -221,7 +258,7 @@ if REPENTOGON then
   -- start ModConfigMenu --
   function mod:setupModConfigMenu()
     local category = 'Bomb Crawl Spaces'
-    for _, v in ipairs({ 'Settings' }) do
+    for _, v in ipairs({ 'Settings', 'Compat' }) do
       ModConfigMenu.RemoveSubcategory(category, v)
     end
     ModConfigMenu.AddText(category, 'Settings', 'Chance for a bombable crawl space:')
@@ -243,6 +280,25 @@ if REPENTOGON then
           mod:save()
         end,
         Info = { 'Default: 50%', 'Calculated on first room visit' }
+      }
+    )
+    ModConfigMenu.AddTitle(category, 'Compat', 'Crawlspaces Rebuilt')
+    ModConfigMenu.AddSetting(
+      category,
+      'Compat',
+      {
+        Type = ModConfigMenu.OptionType.BOOLEAN,
+        CurrentSetting = function()
+          return mod.state.blackMarketDoors
+        end,
+        Display = function()
+          return 'Black market doors : ' .. (mod.state.blackMarketDoors and 'enabled' or 'disabled')
+        end,
+        OnChange = function(b)
+          mod.state.blackMarketDoors = b
+          mod:save()
+        end,
+        Info = { 'Default: enabled', 'Match the setting from crawlspaces rebuilt' }
       }
     )
   end
