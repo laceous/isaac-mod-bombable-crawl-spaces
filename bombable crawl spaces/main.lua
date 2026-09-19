@@ -99,6 +99,15 @@ if REPENTOGON then
     end
   end
   
+  -- do this 1 frame later than onNewRoom
+  function mod:onUpdate()
+    local room = game:GetRoom()
+    
+    if room:GetFrameCount() == 1 then
+      mod:checkCanSeeEverything()
+    end
+  end
+  
   -- filtered to COLLECTIBLE_DADS_KEY (includes get out of jail free card)
   function mod:onUseItem(collectible, rng, player, useFlags, activeSlot, varData)
     if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
@@ -113,6 +122,28 @@ if REPENTOGON then
       return
     end
     mod:onUseOpenDoorItem()
+  end
+  
+  -- filtered to PILLEFFECT_SEE_FOREVER
+  function mod:onUsePill(pillEffect, player, useFlags)
+    if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
+      return
+    end
+    mod:checkCanSeeEverything()
+  end
+  
+  -- filtered to COLLECTIBLE_XRAY_VISION
+  function mod:onAddCollectible()
+    mod:checkCanSeeEverything()
+  end
+  
+  -- pill or x-ray vision
+  function mod:checkCanSeeEverything()
+    local level = game:GetLevel()
+    
+    if level:GetCanSeeEverything() or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_XRAY_VISION, false) then
+      mod:onUseOpenDoorItem()
+    end
   end
   
   function mod:onUseOpenDoorItem()
@@ -322,8 +353,11 @@ if REPENTOGON then
   mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, mod.onGameStart)
   mod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, mod.onGameExit)
   mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, mod.onNewRoom)
+  mod:AddCallback(ModCallbacks.MC_POST_UPDATE, mod.onUpdate)
   mod:AddCallback(ModCallbacks.MC_USE_ITEM, mod.onUseItem, CollectibleType.COLLECTIBLE_DADS_KEY)
   mod:AddCallback(ModCallbacks.MC_USE_CARD, mod.onUseCard, Card.CARD_SOUL_CAIN)
+  mod:AddCallback(ModCallbacks.MC_USE_PILL, mod.onUsePill, PillEffect.PILLEFFECT_SEE_FOREVER)
+  mod:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, mod.onAddCollectible, CollectibleType.COLLECTIBLE_XRAY_VISION)
   mod:AddCallback(ModCallbacks.MC_POST_BOMB_DAMAGE, mod.onBombDamage)
   mod:AddCallback(ModCallbacks.MC_POST_GRID_ROCK_DESTROY, mod.onGridRockDestroy)
   mod:AddCallback(ModCallbacks.MC_PRE_CHANGE_ROOM, mod.onPreChangeRoom)
