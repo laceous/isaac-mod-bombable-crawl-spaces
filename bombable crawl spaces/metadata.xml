@@ -5,14 +5,14 @@
     <id>3801389626</id>
     <description>Ever gone into a crawl space and wanted to bomb your way to the black market? Ever wanted to bomb through that one wall that hides an item behind it? Well, now you can... 50% of the time.
 
-This mod allows you to bomb selective walls in crawl spaces. You can also use Sulfuric Acid, Dad's Key, Get out of Jail Free Card, Soul of Cain, X-Ray Vision, or I can see forever pills in these rooms. The idea is that this acts like a secret room entrance hidden behind an RNG system rather than a map system. Only built-in rooms are currently supported.
+This mod allows you to bomb selective walls in crawl spaces. You can also use Terra, Sulfuric Acid, Dad's Key, Get out of Jail Free Card, Soul of Cain, X-Ray Vision, or I can see forever pills in these rooms. The idea is that this acts like a secret room entrance hidden behind an RNG system rather than a map system. Only built-in rooms are currently supported.
 
 Mod Config Menu will let you change the percentage.
 
 This mod requires REPENTOGON.
 
 Update: Better support for black market doors from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3057349799]Crawlspaces Rebuilt[/url] has been added. Doors should now show up immediately, and in non-standard places.</description>
-    <version>1.5</version>
+    <version>1.6</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Rooms"/>
