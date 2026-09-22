@@ -12,7 +12,7 @@ Mod Config Menu will let you change the percentage.
 This mod requires REPENTOGON.
 
 Update: Better support for black market doors from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3057349799]Crawlspaces Rebuilt[/url] has been added. Doors should now show up immediately, and in non-standard places.</description>
-    <version>1.6</version>
+    <version>1.7</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Rooms"/>

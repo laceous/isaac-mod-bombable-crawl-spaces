@@ -89,7 +89,7 @@ if REPENTOGON then
             end
             if gridEntity:GetType() == GridEntityType.GRID_ROCK then
               gridEntity:GetSprite():Load('gfx/grid/tiles_itemdungeon.anm2', true)
-              gridEntity:GetSprite():Play(mod:doBetterGridEntityRNG(room:GetDecorationSeed(), gridEntity:GetGridIndex(), { 'LowBrick1', 'LowBrick2' }), true)
+              gridEntity:GetSprite():Play(mod:doBetterGridEntityRNG(gridEntity, { 'LowBrick1', 'LowBrick2' }), true)
               gridEntity:GetSprite().Color = Color(1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0.3) -- red
             end
           end
@@ -210,9 +210,9 @@ if REPENTOGON then
       local belowGravity = room:GetGridEntity(i + w)
       if belowGravity and mod:tblHasVal({ GridEntityType.GRID_ROCKB, GridEntityType.GRID_WALL }, belowGravity:GetType()) then
         gravity:GetSprite():Load('gfx/grid/tiles_itemdungeon.anm2', true)
-        gravity:GetSprite():Play(mod:doBetterGridEntityRNG(room:GetDecorationSeed(), gravity:GetGridIndex(), { 'Floor1', 'Floor2', 'Floor3' }), true)
+        gravity:GetSprite():Play(mod:doBetterGridEntityRNG(gravity, { 'Floor1', 'Floor2', 'Floor3' }), true)
         belowGravity:GetSprite():Load('gfx/grid/tiles_itemdungeon.anm2', true)
-        belowGravity:GetSprite():Play(mod:doBetterGridEntityRNG(room:GetDecorationSeed(), belowGravity:GetGridIndex(), { 'Brick1', 'Brick2', 'Brick3' }), true)
+        belowGravity:GetSprite():Play(mod:doBetterGridEntityRNG(belowGravity, { 'Brick1', 'Brick2', 'Brick3' }), true)
       end
       
       -- the game likes to teleport you out of the room sooner than you'd think (especially on your first visit)
@@ -252,12 +252,11 @@ if REPENTOGON then
     end
   end
   
-  -- gridEntity:GetRNG isn't very good rng, it always initializes the same
-  function mod:doBetterGridEntityRNG(seed, gridIdx, options)
-    local rng = RNG(seed, mod.rngShiftIdx)
-    for i = 0, gridIdx do
-      rng:Next()
-    end
+  -- gridEntity:GetRNG():GetSeed()
+  -- gridEntity:GetSaveState().VariableSeed
+  -- always seem to initialize the same
+  function mod:doBetterGridEntityRNG(gridEntity, options)
+    local rng = RNG(gridEntity:GetSaveState().SpawnSeed, mod.rngShiftIdx)
     return options[rng:RandomInt(#options) + 1]
   end
   
